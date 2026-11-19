@@ -39,11 +39,12 @@ So the required `ci` check catches mistakes; it is not a security boundary. The 
   code with elevated privileges.
 - Pinned tools and actions, so an upstream compromise can't change what runs.
 - Locally, read before you run. mise trusts this directory by path, not by content, so on
-  someone else's branch `mise install` and `mise run lint` execute that branch's `mise.toml`
-  and `mise.lock` (and `npm ci` its `package.json`) as you, with your credentials, including
-  your `gh` token. Review the diff of those files first. A fresh clone is not isolation: it still
-  runs as you and can read your home directory and credential stores. If you need to run an
-  unreviewed branch, use a container, VM or Codespace without your credentials, or rely on CI.
+  someone else's branch `mise install` and `mise run lint` execute whatever that branch defines,
+  as you, with your credentials, including your `gh` token. mise reads config and tasks from
+  several files (`mise.toml`, `.mise.toml`, `mise.local.toml`, `.mise/`, `.config/mise/` and
+  more), so review the whole diff, not a list of files. A fresh clone is not isolation: it still
+  runs as you and can read your home directory and credential stores. For an unreviewed branch,
+  rely on CI or use a container, VM or Codespace without your credentials.
 
 Checks stay defined once, in `mise.toml`, so local runs and CI run the same thing. Don't
 duplicate the list in `ci.yml`.

@@ -47,10 +47,11 @@ Every caller runs this code with its own secrets, so everything here follows the
 This repo's own CI runs `actionlint` and `zizmor` on every PR. To run the same checks locally,
 `mise install` once, then `mise run lint`.
 
-These commands run whatever the checked-out branch defines in `mise.toml` and `mise.lock`, as
-you, with your credentials. On a branch you didn't write, review its changes to those files
-first, or run the checks in a container, VM or Codespace that has no access to your
-credentials. CI runs them on every PR without your credentials, so you rarely need to.
+These commands run whatever the checked-out branch defines, as you, with your credentials. mise
+reads configuration and tasks from several files, not only `mise.toml`, so on a branch you
+didn't write, review the whole diff before running anything locally. Otherwise rely on CI, which
+runs these checks on every PR without your credentials, or use a container, VM or Codespace that
+has no access to them.
 
 ## Planned contents
 
