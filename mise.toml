@@ -11,4 +11,8 @@ zizmor = "1.32.0"
 [tasks.lint]
 description = "Lint and security-scan every workflow and action"
 # GH_TOKEN turns on zizmor's online audits (known-vulnerable actions, impostor commits).
-run = ["actionlint", 'GH_TOKEN="${GH_TOKEN:-$(gh auth token)}" zizmor .']
+# In GitHub Actions, --format=github turns findings into file/line annotations on the PR.
+run = [
+  "actionlint",
+  '''GH_TOKEN="${GH_TOKEN:-$(gh auth token)}" zizmor $([ "${GITHUB_ACTIONS:-}" = true ] && echo --format=github) .''',
+]
