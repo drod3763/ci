@@ -1,5 +1,9 @@
 # The only place tool versions are set: CI installs these through jdx/mise-action.
 # Dependabot doesn't read this file, so bump versions by hand (at least two weeks old).
+# mise.lock pins each tool's download URL and SHA-256 per platform. After changing a
+# version, run `mise lock --platform linux-x64,macos-arm64` and commit mise.lock.
+# CI sets MISE_LOCKED=1 so it installs only what mise.lock lists. (A [settings] locked =
+# true here would also lock tools from your global mise config.)
 [tools]
 actionlint = "1.7.12"
 zizmor = "1.32.0"
