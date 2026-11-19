@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "description": "Dev dependencies for linting this repo. Node comes from mise.toml.",
+  "devDependencies": {
+    "@drod3763/markdownlint-config": "1.0.0",
+    "markdownlint-cli2": "0.24.0"
+  },
+  "overrides": {
+    "re2js": "2.8.7"
+  }
+}

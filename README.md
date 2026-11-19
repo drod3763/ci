@@ -44,8 +44,10 @@ Every caller runs this code with its own secrets, so everything here follows the
 - Releases are semver tags (`v1.0.0`).
 - The repo stays public: public repos can't call workflows in private repos.
 
-This repo's own CI runs `actionlint` and `zizmor` on every PR. To run the same checks locally,
-`mise install` once, then `mise run lint`.
+This repo's own CI checks workflows (actionlint, zizmor), shell scripts (shellcheck, shfmt),
+YAML formatting (yamlfmt), spelling (typos), Markdown (markdownlint-cli2 with
+`@drod3763/markdownlint-config`) and that PR titles are Conventional Commits. To run the same
+checks locally, `mise install` once, then `mise run lint`. `mise run fmt` fixes formatting.
 
 ## Planned contents
 
