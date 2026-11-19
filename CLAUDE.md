@@ -25,8 +25,10 @@ work and update it when a decision or the roadmap changes.
 
 ## Validating changes
 
-- `actionlint` (installed locally) on every workflow change.
-- `zizmor .` if installed; CI runs it on every PR either way.
+- `mise run lint` on every change. It runs `actionlint` and `zizmor` at the versions pinned in
+  `mise.toml` (installed per-repo by `mise install`). CI runs the same checks on every PR.
+- `mise.toml` is the only place tool versions are set; CI installs them with `jdx/mise-action`.
+  Dependabot doesn't update it, so bump versions by hand.
 
 ## Git
 

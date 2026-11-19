@@ -44,7 +44,8 @@ Every caller runs this code with its own secrets, so everything here follows the
 - Releases are semver tags (`v1.0.0`).
 - The repo stays public: public repos can't call workflows in private repos.
 
-This repo's own CI runs `actionlint` and `zizmor` on every PR.
+This repo's own CI runs `actionlint` and `zizmor` on every PR. To run the same checks locally,
+`mise install` once, then `mise run lint`.
 
 ## Planned contents
 
