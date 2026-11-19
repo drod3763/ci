@@ -23,6 +23,25 @@ work and update it when a decision or the roadmap changes.
   are reached through `${{ github.action_path }}`.
 - The repo must stay public.
 
+## Trust model for this repo's own CI
+
+`ci.yml` runs on `pull_request`, so everything it executes comes from the PR: the workflow file,
+`mise.toml` (tool versions and the `lint` task) and the code being checked. A PR can change any
+of them, including turning a check into a no-op. That is true of every `pull_request` workflow,
+and moving a check out of `ci.yml` neither adds nor removes that ability.
+
+So the required `ci` check catches mistakes; it is not a security boundary. The boundary is:
+
+- Review: main only changes through a PR that the owner reviews and merges. Review the whole
+  diff, including `mise.toml` and `package.json`, not only `.github/`.
+- No privilege for PR code: `contents: read`, no secrets, `persist-credentials: false`, and never
+  `pull_request_target` or reading "trusted" config from the base branch, which would run PR
+  code with elevated privileges.
+- Pinned tools and actions, so an upstream compromise can't change what runs.
+
+Checks stay defined once, in `mise.toml`, so local runs and CI run the same thing. Don't
+duplicate the list in `ci.yml`.
+
 ## Validating changes
 
 - `mise run lint` on every change. It runs `actionlint` and `zizmor` at the versions pinned in

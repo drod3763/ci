@@ -29,6 +29,9 @@ jobs:
           version: 2026.11.1
           cache: false
 
+      # The lint task is defined in mise.toml, which the PR controls, the same as this
+      # workflow file. That is intentional: on pull_request, PR code is untrusted and
+      # unprivileged, and owner review is the merge gate. See "Trust model" in CLAUDE.md.
       - name: Lint
         run: mise run lint
         env:
