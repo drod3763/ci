@@ -1,10 +1,48 @@
-# The only place tool versions are set: CI installs these through jdx/mise-action.
+# Tool versions for local runs and CI (installed by jdx/mise-action).
 # Dependabot doesn't read this file, so bump versions by hand (at least two weeks old).
+# markdownlint-cli2 is in package.json so it can reuse @drod3763/markdownlint-config.
 [tools]
+node = "24.22.2"
 actionlint = "1.7.12"
 zizmor = "1.32.0"
+shellcheck = "0.11.0"
+shfmt = "3.14.1"
+yamlfmt = "0.21.0"
+typos = "1.52.0"
+
+[tasks.install]
+description = "Install npm dev dependencies (markdownlint-cli2 and its shared config)"
+run = "npm ci"
+sources = ["package.json", "package-lock.json"]
+outputs = ["node_modules/.package-lock.json"]
 
 [tasks.lint]
-description = "Lint and security-scan every workflow and action"
+description = "Check everything; changes nothing"
+depends = ["install"]
+run = """
+set -eu
+# actionlint also runs shellcheck on every run: block, because shellcheck is on PATH.
+actionlint
 # GH_TOKEN turns on zizmor's online audits (known-vulnerable actions, impostor commits).
-run = ["actionlint", 'GH_TOKEN="${GH_TOKEN:-$(gh auth token)}" zizmor .']
+GH_TOKEN="${GH_TOKEN:-$(gh auth token)}" zizmor .
+scripts=$(git ls-files '*.sh' '*.bash')
+if [ -n "$scripts" ]; then
+  shellcheck $scripts
+  shfmt --diff $scripts
+fi
+yamlfmt -lint .
+typos
+npx --no-install markdownlint-cli2
+"""
+
+[tasks.fmt]
+description = "Fix formatting, spelling and Markdown style in place"
+depends = ["install"]
+run = """
+set -eu
+scripts=$(git ls-files '*.sh' '*.bash')
+if [ -n "$scripts" ]; then shfmt --write $scripts; fi
+yamlfmt .
+typos --write-changes
+npx --no-install markdownlint-cli2 --fix
+"""

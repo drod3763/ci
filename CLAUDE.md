@@ -5,7 +5,7 @@ the repo root) called by my other repos. Callers run this code with their own se
 every change as security-sensitive.
 
 Plan and decision log: the "Shared CI" artifact,
-https://claude.ai/code/artifact/65605ad2-92dc-4804-bdb4-234c8d689b90. Read it before starting
+<https://claude.ai/code/artifact/65605ad2-92dc-4804-bdb4-234c8d689b90>. Read it before starting
 work and update it when a decision or the roadmap changes.
 
 ## Rules for workflows and actions
@@ -25,10 +25,18 @@ work and update it when a decision or the roadmap changes.
 
 ## Validating changes
 
-- `mise run lint` on every change. It runs `actionlint` and `zizmor` at the versions pinned in
-  `mise.toml` (installed per-repo by `mise install`). CI runs the same checks on every PR.
-- `mise.toml` is the only place tool versions are set; CI installs them with `jdx/mise-action`.
-  Dependabot doesn't update it, so bump versions by hand.
+- `mise run lint` before every commit. It changes nothing and runs: actionlint (with shellcheck
+  on every `run:` block), zizmor, shellcheck and shfmt on shell scripts, yamlfmt, typos and
+  markdownlint-cli2. CI runs the same task on every PR.
+- `mise run fmt` fixes what it can: shfmt, yamlfmt, typos and markdownlint-cli2 `--fix`.
+- Tool versions live in `mise.toml` (Node too); CI installs them with `jdx/mise-action`.
+  Dependabot doesn't update `mise.toml`, so bump those by hand (releases at least two weeks old).
+- markdownlint-cli2 and `@drod3763/markdownlint-config` are npm dev dependencies so the shared
+  config resolves through `extends`. Dependabot bumps them. `.npmrc` turns off install scripts.
+  When regenerating the lockfile by hand, use `npm install --before=<date two weeks ago>`.
+- `package.json` overrides `re2js` to 2.8.7 (fixes a regex DoS advisory; markdownlint 0.42.0
+  pins 2.8.6). Remove the override once markdownlint-cli2 0.24.1 or later is two weeks old.
+- PR titles must be Conventional Commits; CI checks this because squash merges use the title.
 
 ## Git
 
