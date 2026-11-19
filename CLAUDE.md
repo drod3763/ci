@@ -38,6 +38,10 @@ So the required `ci` check catches mistakes; it is not a security boundary. The 
   `pull_request_target` or reading "trusted" config from the base branch, which would run PR
   code with elevated privileges.
 - Pinned tools and actions, so an upstream compromise can't change what runs.
+- Locally, read before you run. mise trusts this directory by path, not by content, so on
+  someone else's branch `mise install` and `mise run lint` execute that branch's `mise.toml`
+  (and `npm ci` its `package.json`) with your credentials, including your `gh` token. Read the
+  diff of those files first, or check the branch out in a throwaway clone with no credentials.
 
 Checks stay defined once, in `mise.toml`, so local runs and CI run the same thing. Don't
 duplicate the list in `ci.yml`.
