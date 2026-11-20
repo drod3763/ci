@@ -44,7 +44,21 @@ Every caller runs this code with its own secrets, so everything here follows the
 - Releases are semver tags (`v1.0.0`).
 - The repo stays public: public repos can't call workflows in private repos.
 
-This repo's own CI runs `actionlint` and `zizmor` on every PR.
+This repo's own CI runs `actionlint` and `zizmor` on every PR. To run the same checks locally,
+`mise install` once, then `mise run lint`.
+
+These commands run whatever the checked-out branch defines, as you, with your credentials. mise
+reads configuration and tasks from several files, not only `mise.toml`, so on a branch you
+didn't write, review the whole diff before running anything locally. Otherwise rely on CI, which
+runs these checks on every PR without your credentials, or use a container, VM or Codespace that
+has no access to them.
+
+Turn on mise's `paranoid` setting (`mise settings set paranoid true`). With it on, a checkout
+that edits or adds mise config, including hooks that run when you `cd` into the repo, is
+refused until you review it and run `mise trust` again. Without it, mise trusts this directory
+by path and loads whatever the branch defines, with no prompt. Paranoid mode doesn't check
+paths listed in `trusted_config_paths` or `MISE_TRUSTED_CONFIG_PATHS`, so keep this checkout and
+its parent directories out of both.
 
 ## Planned contents
 
