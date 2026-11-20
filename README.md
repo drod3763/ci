@@ -56,7 +56,9 @@ has no access to them.
 Turn on mise's `paranoid` setting (`mise settings set paranoid true`). With it on, a checkout
 that edits or adds mise config, including hooks that run when you `cd` into the repo, is
 refused until you review it and run `mise trust` again. Without it, mise trusts this directory
-by path and loads whatever the branch defines, with no prompt.
+by path and loads whatever the branch defines, with no prompt. Paranoid mode doesn't check
+paths listed in `trusted_config_paths` or `MISE_TRUSTED_CONFIG_PATHS`, so keep this checkout and
+its parent directories out of both.
 
 ## Planned contents
 

@@ -49,7 +49,9 @@ So the required `ci` check catches mistakes; it is not a security boundary. The 
   file by its contents, so after a checkout that edits or adds mise config it refuses to load
   that config until you review it and run `mise trust` again. This includes hooks that run
   when you `cd` into the directory with mise activated. Without it, a trusted path loads
-  whatever the branch puts there, with no prompt.
+  whatever the branch puts there, with no prompt. Paranoid mode doesn't check paths listed in
+  `trusted_config_paths` or `MISE_TRUSTED_CONFIG_PATHS`, so keep this checkout and its parent
+  directories out of both.
 
 Checks stay defined once, in `mise.toml`, so local runs and CI run the same thing. Don't
 duplicate the list in `ci.yml`.
