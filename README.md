@@ -53,6 +53,11 @@ didn't write, review the whole diff before running anything locally. Otherwise r
 runs these checks on every PR without your credentials, or use a container, VM or Codespace that
 has no access to them.
 
+Turn on mise's `paranoid` setting (`mise settings set paranoid true`). With it on, a checkout
+that edits or adds mise config, including hooks that run when you `cd` into the repo, is
+refused until you review it and run `mise trust` again. Without it, mise trusts this directory
+by path and loads whatever the branch defines, with no prompt.
+
 ## Planned contents
 
 - JS/TS workflows (commitlint, format-check, lint, markdownlint, publish, test, typecheck),
